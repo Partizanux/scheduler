@@ -36,11 +36,21 @@ public class ActionLogic {
 		String date;
 		String time;
 
-		int d = Integer.parseInt(dd);
-		int m = Integer.parseInt(mm);
-		int y = Integer.parseInt(yy);
-		int h = Integer.parseInt(hour);
-		int mnt = Integer.parseInt(min);
+		int d = -1;
+		int m = -1;
+		int y = -1;
+		int h = -1;
+		int mnt = -1;
+		
+		try {
+			d = Integer.parseInt(dd);
+			m = Integer.parseInt(mm);
+			y = Integer.parseInt(yy);
+			h = Integer.parseInt(hour);
+			mnt = Integer.parseInt(min);
+		} catch (NumberFormatException e1) {
+			throw new FmtDataException();
+		}
 
 		if (d < 1 || d > 31 || m < 1 || m > 12 || y < 0 || h < 0 || h > 23
 				|| mnt < 0 || mnt > 59)
@@ -64,6 +74,9 @@ public class ActionLogic {
 
 			ps.setString(1, date);
 			ps.setString(2, time);
+			
+			System.out.println(task);// ! ! !
+			
 			ps.setString(3, task);
 			ps.setInt(4, status);
 			ps.setInt(5, ii);
