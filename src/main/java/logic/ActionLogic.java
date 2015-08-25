@@ -25,7 +25,7 @@ public class ActionLogic {
 	private static final String CHECK = "SELECT COUNT(*) FROM users WHERE login = ? AND pass = ?";
 	private static final String REG_QUERY = "INSERT INTO users (firstName, lastName, login, pass, email) VALUES (?, ?, ?, ?, ?);";
 	private static final String CHECK_EXISTS = "SELECT COUNT(*) FROM users WHERE login = ?";
-	private static final String VIEW_QUERY = "SELECT idtask, date, time, task, status, notify FROM Tasks WHERE iduser = ? ORDER BY date, time";
+	private static final String VIEW_QUERY = "SELECT idtask, date, time, task, status, notify FROM tasks WHERE iduser = ? ORDER BY date, time";
 	
 	private static final String NOTIFICATION_ON = "UPDATE Tasks SET notify = 1 WHERE idtask = ?";
 	private static final String NOTIFICATION_OFF = "UPDATE Tasks SET notify = 0 WHERE idtask = ?";
