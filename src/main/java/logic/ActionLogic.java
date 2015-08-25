@@ -18,10 +18,10 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class ActionLogic {
 
-	private static final String ADD_QUERY = "INSERT INTO Tasks (date, time, task, status, iduser, notify) VALUES (?, ?, ?, ?, ?, ?);";
+	private static final String ADD_QUERY = "INSERT INTO tasks (date, time, task, status, iduser, notify) VALUES (?, ?, ?, ?, ?, ?);";
 	private static final String GET_ID = "SELECT iduser FROM users WHERE login = ?";// login is unique
 	private static final String DEL_QUERY = "DELETE FROM Tasks WHERE idtask = ?";
-	private static final String DONE_QUERY = "UPDATE Tasks SET status = 1 WHERE idtask = ?";
+	private static final String DONE_QUERY = "UPDATE tasks SET status = 1 WHERE idtask = ?";
 	private static final String CHECK = "SELECT COUNT(*) FROM users WHERE login = ? AND pass = ?";
 	private static final String REG_QUERY = "INSERT INTO users (firstName, lastName, login, pass, email) VALUES (?, ?, ?, ?, ?);";
 	private static final String CHECK_EXISTS = "SELECT COUNT(*) FROM users WHERE login = ?";

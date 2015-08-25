@@ -30,7 +30,7 @@
 
 	<security-constraint>
 		<web-resource-collection>
-			<web-resource-name>MyWebSite</web-resource-name>
+			<web-resource-name>scheduler</web-resource-name>
 			<url-pattern>/*</url-pattern>
 			<http-method>GET</http-method>
 			<http-method>POST</http-method>

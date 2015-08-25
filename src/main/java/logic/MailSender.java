@@ -26,7 +26,7 @@ import filters.UserAuthFilter;
 
 public class MailSender {
 	private static Context ctx;
-	private static final String CHOOSE_TASK_QUERY = "SELECT * FROM Tasks WHERE idtask = ?";
+	private static final String CHOOSE_TASK_QUERY = "SELECT * FROM tasks WHERE idtask = ?";
 	private static final String GET_EMAIL = "SELECT email FROM users WHERE iduser = ?";
 	private static final String EMAIL_WAS_SENT = "UPDATE tasks SET notify = 2 WHERE idtask = ?";
 	private static String subject = "Task Notification";
