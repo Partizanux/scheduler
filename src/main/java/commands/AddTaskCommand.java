@@ -25,7 +25,7 @@ public class AddTaskCommand implements Command {
 		
 		String task = request.getParameter("task");
 		
-		System.out.println("before encoding " + task);
+		System.out.println("before encoding: " + task);
 		
 		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
