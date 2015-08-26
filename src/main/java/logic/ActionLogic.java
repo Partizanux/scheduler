@@ -82,10 +82,6 @@ public class ActionLogic {
 
 			ps.execute();
 			
-			PreparedStatement ps1 = conn.prepareStatement("INSERT INTO tasks "
-					+ "(date, time, task, status, iduser, notify) VALUES ('2014-11-11', '10:00:00', 'привіт 2', 0, 1, 0);");
-
-			ps1.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -248,7 +244,7 @@ public class ActionLogic {
 				UTasks t = new UTasks();
 				t.setIdt(rslt.getInt(1));
 				t.setDate(rslt.getString(2));
-				t.setTime(rslt.getString(3));
+				t.setTime(rslt.getString(3));				
 				t.setTaskmsg(rslt.getString(4));
 				if (rslt.getBoolean(5) == false)//false
 					t.setStatus("not_done");

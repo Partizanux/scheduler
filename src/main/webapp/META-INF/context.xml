@@ -24,7 +24,7 @@
           username="adminv45giMF"
           password="ysn4xfX21zZZ"
           driverClassName="com.mysql.jdbc.Driver"
-          url="jdbc:mysql://127.7.199.130:3306/scheduler"/>
+          url="jdbc:mysql://127.7.199.130:3306/scheduler?characterEncoding=UTF-8"/>
           
 <Resource name="mail/Session" 
           auth="Container"

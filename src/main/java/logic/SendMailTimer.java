@@ -21,6 +21,7 @@ public class SendMailTimer extends TimerTask{
 				"SELECT idtask, iduser FROM tasks WHERE status=0 AND notify=1 AND date=?";
 		@Override
 		public void run() {
+			System.out.println("in SendMailTimer");
 			userTasks.clear();
 			
 			getUserTasks();
