@@ -97,7 +97,7 @@ public class MailSender {
 		String starttls = (String) rb.getObject("mail.smtp.starttls.enable");
 		final String user = (String) rb.getObject("mail.smtp.user");
 		final String password = (String) rb.getObject("password");
-/*		
+		/*	
 		System.out.println("properties:");
 		Properties props = null;
 		try {
@@ -121,8 +121,6 @@ public class MailSender {
 	      String key = keys.nextElement();
 	      props.put(key, rb.getString(key));
 	    }
-	    
-		System.out.println(user);
 		
 		Session session = Session.getInstance(props,
 				  new javax.mail.Authenticator() {

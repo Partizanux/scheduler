@@ -24,7 +24,6 @@ public class Manager extends HttpServlet {
 		super();
 		Timer timer = new Timer();
 		timer.schedule(new SendMailTimer(), 0L, 600000L);//check every 10 min
-		System.out.println("in constructor");
 	}
 
 
