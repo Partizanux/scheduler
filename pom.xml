@@ -107,6 +107,7 @@
 						<directory>src/main/resources</directory>
 						<includes>
 							<include>log4j.properties</include>
+							<include>email.properties</include>
 						</includes>
 					</resource>
 				</resources>

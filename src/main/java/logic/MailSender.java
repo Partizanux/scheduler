@@ -1,15 +1,21 @@
 package logic;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.ResourceBundle;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
 import javax.mail.SendFailedException;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -93,13 +99,38 @@ public class MailSender {
 
 	private static void send(int iduser, String subject, String text, String fromEmail,
 			String toEmail) {
-		Session session = null;
+/*
+		ResourceBundle rb = ResourceBundle.getBundle("email");
+		String host = (String) rb.getObject("mail.smtp.host");
+		String port = (String) rb.getObject("mail.smtp.port");
+		String auth = (String) rb.getObject("mail.smtp.auth");
+		String starttls = (String) rb.getObject("mail.smtp.starttls.enable");
+		final String user = (String) rb.getObject("mail.smtp.user");
+		final String password = (String) rb.getObject("password");
+		*/
+		
+		Properties props = null;
 		try {
-			session = (Session) ctx.lookup("java:comp/env/mail/Session");
-		} catch (NamingException e1) {
+			props = new Properties();
+			FileInputStream in = new FileInputStream("email");
+			props.load(in);
+			in.close();
+		} catch (FileNotFoundException e1) {
+			e1.printStackTrace();
+		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
+		
+		final String user = (String) props.getProperty("mail.smtp.user");
+		final String password = (String) props.getProperty("password");
 
+		Session session = Session.getInstance(props,
+				  new javax.mail.Authenticator() {
+					protected PasswordAuthentication getPasswordAuthentication() {
+						return new PasswordAuthentication(user, password);
+					}
+				  });
+		
 		try {
 			Message message = new MimeMessage(session);
 
