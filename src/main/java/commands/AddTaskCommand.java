@@ -26,12 +26,9 @@ public class AddTaskCommand implements Command {
 		String task = request.getParameter("task");
 		
 		System.out.println("before encoding: " + task);
-		System.out.println("привіт");
 		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
 		task = new String(bytes, StandardCharsets.UTF_8);		
-		task = "привіт хохохо";
-		System.out.println("blabla");
 		
 		
 		HttpSession session = request.getSession(false);
