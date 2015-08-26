@@ -27,7 +27,7 @@ public class AddTaskCommand implements Command {
 		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
 		for(int i = 0; i < bytes.length; i++){
-			System.out.println(bytes[i]);
+			System.out.print(bytes[i]);
 		}
 		task = new String(bytes, StandardCharsets.UTF_8);
 		
@@ -41,7 +41,7 @@ public class AddTaskCommand implements Command {
 		} catch (FmtDataException fde) {
 			request.setAttribute("errorPageMsg",
 					"FmtDataException: input data is not correct");
-			page = "/error.jsp";
+			page = "/error.jsp";//main.jsp
 		} catch (Exception e) {
 			e.printStackTrace();
 			request.setAttribute("errorPageMsg", "Exception e");
