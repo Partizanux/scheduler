@@ -247,9 +247,7 @@ public class ActionLogic {
 				t.setIdt(rslt.getInt(1));
 				t.setDate(rslt.getString(2));
 				t.setTime(rslt.getString(3));
-				String tsk = rslt.getString(4);
-				t.setTaskmsg(tsk);
-				System.out.println("in getTasks" + tsk);
+				t.setTaskmsg(rslt.getString(4));
 				if (rslt.getBoolean(5) == false)//false
 					t.setStatus("not_done");
 				else
