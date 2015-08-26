@@ -8,11 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
-import java.util.ResourceBundle;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -28,24 +23,13 @@ import main.Configs;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
-import filters.UserAuthFilter;
-
 public class MailSender {
-	private static Context ctx;
 	private static final String CHOOSE_TASK_QUERY = "SELECT * FROM tasks WHERE idtask = ?";
 	private static final String GET_EMAIL = "SELECT email FROM users WHERE iduser = ?";
 	private static final String EMAIL_WAS_SENT = "UPDATE tasks SET notify = 2 WHERE idtask = ?";
 	private static String subject = "Task Notification";
 	private static String from = "YourSchedulerApp Notification <YourSchedulerApp@hotmail.com>";
 	private static final Logger log = Logger.getLogger(MailSender.class);
-	
-	static {
-		try {
-			ctx = new InitialContext();
-		} catch (NamingException e) {
-			e.printStackTrace();
-		}
-	}
 
 	public static void sendMail(int idtask, int iduser) {
 
@@ -75,10 +59,12 @@ public class MailSender {
 			sb.append(rslt.getString(4));
 
 			if (rslt.getBoolean(5) == false){//status - not done				
-						send(iduser, subject, sb.toString(), from, email);
-						PreparedStatement pst3 = conn.prepareStatement(EMAIL_WAS_SENT);
-						pst3.setInt(1, idtask);
-						pst3.executeUpdate();
+				if (send(iduser, subject, sb.toString(), from, email) == true) {
+					PreparedStatement pst3 = conn
+							.prepareStatement(EMAIL_WAS_SENT);
+					pst3.setInt(1, idtask);
+					pst3.executeUpdate();
+				}
 				}
 			
 		} catch (MySQLSyntaxErrorException msqle) {
@@ -97,8 +83,9 @@ public class MailSender {
 		}
 	}
 
-	private static void send(int iduser, String subject, String text, String fromEmail,
+	private static boolean send(int iduser, String subject, String text, String fromEmail,
 			String toEmail) {
+		boolean success = false;
 /*
 		ResourceBundle rb = ResourceBundle.getBundle("email");
 		String host = (String) rb.getObject("mail.smtp.host");
@@ -108,7 +95,7 @@ public class MailSender {
 		final String user = (String) rb.getObject("mail.smtp.user");
 		final String password = (String) rb.getObject("password");
 		*/
-		
+		System.out.println("properties:");
 		Properties props = null;
 		try {
 			props = new Properties();
@@ -124,6 +111,8 @@ public class MailSender {
 		final String user = (String) props.getProperty("mail.smtp.user");
 		final String password = (String) props.getProperty("password");
 
+		System.out.println(user);
+		
 		Session session = Session.getInstance(props,
 				  new javax.mail.Authenticator() {
 					protected PasswordAuthentication getPasswordAuthentication() {
@@ -145,10 +134,16 @@ public class MailSender {
 
 			Transport.send(message);
 
+			success = true;
+			
 		} catch (SendFailedException se) {
 			log.error("email wasn't sent to user " + iduser, se);
+			success = false;
 		} catch (MessagingException e) {
 			log.error("email wasn't sent to user " + iduser, e);
+			success = false;
 		}
+		
+		return success;
 	}
 }
