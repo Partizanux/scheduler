@@ -26,12 +26,14 @@ public class AddTaskCommand implements Command {
 		String task = request.getParameter("task");
 		
 		System.out.println("before encoding: " + task);
-		
+		System.out.println();
 		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
 		task = new String(bytes, StandardCharsets.UTF_8);
-
-
+		
+		System.out.println("after encoding: " + task);
+		
+		
 		
 		HttpSession session = request.getSession(false);
 		String l = (String) session.getAttribute("login");
