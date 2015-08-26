@@ -75,7 +75,7 @@ public class ActionLogic {
 			ps.setString(1, date);
 			ps.setString(2, time);
 			
-			System.out.println(task);// ! ! !
+			System.out.println("In action logic: " + task);// ! ! !
 			
 			ps.setString(3, task);
 			ps.setInt(4, status);
