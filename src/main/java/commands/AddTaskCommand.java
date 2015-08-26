@@ -30,7 +30,7 @@ public class AddTaskCommand implements Command {
 		System.out.println("хай");
 		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
-		task = new String(bytes, StandardCharsets.UTF_8);		
+		task = new String(bytes, StandardCharsets.UTF_8);
 		task = "привіт";
 		
 		
