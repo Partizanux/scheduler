@@ -25,8 +25,11 @@ public class AddTaskCommand implements Command {
 		
 		String task = request.getParameter("task");
 		
-//		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
-//		task = new String(bytes, StandardCharsets.UTF_8);		
+		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
+		for(int i = 0; i < bytes.length; i++){
+			System.out.println(bytes[i]);
+		}
+		task = new String(bytes, StandardCharsets.UTF_8);
 		
 		HttpSession session = request.getSession(false);
 		String l = (String) session.getAttribute("login");

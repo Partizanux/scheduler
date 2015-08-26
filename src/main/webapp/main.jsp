@@ -34,7 +34,7 @@
 </td>
 
 <td align = "center">
-<textarea name="task" value="" cols="50" rows="4" maxlength=300 accept-charset="UTF-8" required></textarea></td>
+<textarea name="task" value="" cols="50" rows="4" maxlength=300 required></textarea></td>
 </tr>
 
 <tr bgcolor="#c0c0c0">
