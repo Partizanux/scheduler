@@ -24,6 +24,10 @@ public class AddTaskCommand implements Command {
 		String minute = request.getParameter("minutes");
 		
 		String task = request.getParameter("task");
+		
+		System.out.println("before encoding " + task);
+		
+		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
 		task = new String(bytes, StandardCharsets.UTF_8);
 
