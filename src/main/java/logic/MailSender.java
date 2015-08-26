@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Enumeration;
 import java.util.Properties;
+import java.util.ResourceBundle;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
@@ -85,8 +88,8 @@ public class MailSender {
 
 	private static boolean send(int iduser, String subject, String text, String fromEmail,
 			String toEmail) {
-		boolean success = false;
-/*
+		boolean success = true;
+
 		ResourceBundle rb = ResourceBundle.getBundle("email");
 		String host = (String) rb.getObject("mail.smtp.host");
 		String port = (String) rb.getObject("mail.smtp.port");
@@ -94,7 +97,7 @@ public class MailSender {
 		String starttls = (String) rb.getObject("mail.smtp.starttls.enable");
 		final String user = (String) rb.getObject("mail.smtp.user");
 		final String password = (String) rb.getObject("password");
-		*/
+/*		
 		System.out.println("properties:");
 		Properties props = null;
 		try {
@@ -104,13 +107,21 @@ public class MailSender {
 			in.close();
 		} catch (FileNotFoundException e1) {
 			e1.printStackTrace();
+			success = false;
 		} catch (IOException e1) {
 			e1.printStackTrace();
+			success = false;
 		}
+*/
 		
-		final String user = (String) props.getProperty("mail.smtp.user");
-		final String password = (String) props.getProperty("password");
+	    Properties props = new Properties();
 
+	    Enumeration<String> keys = rb.getKeys();
+	    while (keys.hasMoreElements()) {
+	      String key = keys.nextElement();
+	      props.put(key, rb.getString(key));
+	    }
+	    
 		System.out.println(user);
 		
 		Session session = Session.getInstance(props,
@@ -134,8 +145,6 @@ public class MailSender {
 
 			Transport.send(message);
 
-			success = true;
-			
 		} catch (SendFailedException se) {
 			log.error("email wasn't sent to user " + iduser, se);
 			success = false;
