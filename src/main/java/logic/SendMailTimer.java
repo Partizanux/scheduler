@@ -31,7 +31,12 @@ public class SendMailTimer extends TimerTask{
 			while(e.hasMoreElements()){
 				key = e.nextElement();
 				value = userTasks.get(key);
+				
+				System.out.println("before sending mail");
+				
 				MailSender.sendMail(key, value);
+				
+				System.out.println("after mail was sent");
 			}
 			
 		}

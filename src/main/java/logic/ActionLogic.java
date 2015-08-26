@@ -81,7 +81,11 @@ public class ActionLogic {
 			ps.setInt(6, 0);
 
 			ps.execute();
+			
+			PreparedStatement ps1 = conn.prepareStatement("INSERT INTO tasks "
+					+ "(date, time, task, status, iduser, notify) VALUES ('2014-11-11', '10:00:00', 'привіт 2', 0, 1, 0);");
 
+			ps1.execute();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
