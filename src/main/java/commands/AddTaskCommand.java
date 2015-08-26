@@ -30,7 +30,7 @@ public class AddTaskCommand implements Command {
 		
 		byte[] bytes = task.getBytes(StandardCharsets.ISO_8859_1);
 		task = new String(bytes, StandardCharsets.UTF_8);		
-		task = "привіт";
+		task = "привіт хохо";
 		
 		
 		HttpSession session = request.getSession(false);
