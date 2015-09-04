@@ -34,6 +34,6 @@
           mail.smtp.auth="true"
           mail.smtp.starttls.enable="true"
           mail.smtp.user="YourSchedulerApp@hotmail.com"
-          password="********"/>
+          password="t3stt3st"/>
 
 </Context>
