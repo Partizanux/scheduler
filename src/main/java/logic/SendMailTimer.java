@@ -10,12 +10,15 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
+
 import main.Configs;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 //daily notify
 public class SendMailTimer extends TimerTask{
+	private static final Logger log = Logger.getLogger(SendMailTimer.class);
 	private Hashtable<Integer, Integer> userTasks = new Hashtable<Integer, Integer>();//K:idtask - V:iduser
 	private static final String TASKS_TO_BE_SEND = 
 				"SELECT idtask, iduser FROM tasks WHERE status=0 AND notify=1 AND date=?";
@@ -42,12 +45,13 @@ public class SendMailTimer extends TimerTask{
 			String strDate = sdf.format(date);
 			
 			ResultSet rslt = null;
-
+			PreparedStatement pst = null;
 			Connection conn = null;
+			
 			try {
 				conn = Configs.getConnection();
 				
-				PreparedStatement pst = conn.prepareStatement(TASKS_TO_BE_SEND);
+				pst = conn.prepareStatement(TASKS_TO_BE_SEND);
 				pst.setString(1, strDate);
 				rslt = pst.executeQuery();
 				while(rslt.next()){
@@ -63,12 +67,27 @@ public class SendMailTimer extends TimerTask{
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {
-				try {
-					if (conn != null)
-						conn.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+				if (rslt != null) {
+	                try {
+	                    rslt.close();
+	                } catch (SQLException e) {
+	                 log.warn("Failed to close rs", e);
+	                }
+	            }
+	            if (pst != null) {
+	                try {
+	                    pst.close();
+	                } catch (SQLException e) { 
+	                 log.warn("Failed to close st", e);     
+	                }
+	            }
+	            if (conn != null) {
+	                try {
+	                    conn.close();
+	                } catch (SQLException e) {
+	                 log.warn("Failed to close conn", e);
+	                }
+	            }
 			}
 		}
 		

@@ -1,25 +1,28 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<!DOCTYPE html>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
 <head>
 <title>view</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/style.css">
 </head>
 <body>
 <center>
-<table cellpadding=4 cellspacing=1 border=0>
-<th bgcolor="#c0c0c0" colspan=6>
-<font size=5>Your task list, <%=session.getAttribute("login")%></font>
+<table class="view" cellpadding=4 cellspacing=1 border=0>
+<th colspan=6>
+Your task list, <%=session.getAttribute("login")%>
 </th>
-
-<tr bgcolor="#c0c0c0">
-<td align = "center"> <b> Date </b></td>
-<td align = "center"> <b> Time </b></td>
-<td align = "center"> <b> Task </b></td>
-<td align = "center"> <b> Status </b></td>
-<td align = "center"> <b> Notify on email </b></td>
-<td align = "center"> <b> Delete </b></td>
+   <col class="col12" span="2">
+   <col class="col3">
+   <col class="col456" span="3">
+<tr class="header">
+<td align = "center"> Date </td>
+<td align = "center"> Time </td>
+<td align = "center"> Task </td>
+<td align = "center"> Status </td>
+<td align = "center"> Notify on email </td>
+<td align = "center"> Delete </td>
 </tr>
 
 <jsp:useBean id="vbean" class="logic.Schedule" scope="session"/>
@@ -31,7 +34,7 @@
     <tr>
         <td><c:out value="${tsks.date}"/></td>
         <td><c:out value="${tsks.time}"/></td>
-        <td><c:out value="${tsks.taskmsg}"/></td>
+        <td class="task"><c:out value="${tsks.taskmsg}"/></td>
         <td><form id = "doneFrm${tsks.idt}" action="Manager" method="post">
 			<input type="hidden" name="command" value="doneTask"/>
 			<input type="hidden" name="iddone" value="${tsks.idt}"/>
@@ -39,7 +42,7 @@
 				<button type="submit" form="doneFrm${tsks.idt}"> done </button></form>
 			</c:if>
 			<c:if test="${tsks.status eq 'done'}">
-				<button type="submit" form="doneFrm${tsks.idt}" disabled> done </button></form>
+				<button class="bdisabled" type="submit" form="doneFrm${tsks.idt}" disabled> done </button></form>
 			</c:if>
         </td>
         <td>
@@ -54,7 +57,7 @@
 				<button type="submit" form="notifyFrm${tsks.idt}">no</button></form></td>
 			</c:if>
 			<c:if test="${tsks.notification eq 'was sent'}">
-				<button type="submit" form="notifyFrm${tsks.idt}" disabled>was sent</button></form></td>
+				<button class="bdisabled" type="submit" form="notifyFrm${tsks.idt}" disabled>was sent</button></form></td>
 			</c:if>
 		<td>
 			<form id = "delFrm${tsks.idt}" action="Manager" method="post">
@@ -66,14 +69,23 @@
     </tr>
 </c:forEach>
 
-<tr bgcolor="#c0c0c0">
-<td  align=center colspan=6>
-<form id = "exitFrm" action="Manager" method="post">
-<input type="hidden" name="command" value="exit"/>
-<div align=right><button type="submit" form="exitFrm">Exit</button></div>
-</form>
-</td>
-</tr>
+	<tr bgcolor="#c0c0c0">
+		<td align=center colspan=3>
+			<c:set var="contextPath" value="${pageContext.request.contextPath}" />
+			<div align=left>
+					<a href="${contextPath}/main.jsp"><button type="button">add
+							task</button></a>
+			</div>
+		</td>
+		<td align=center colspan=3>
+			<form id="exitFrm" action="Manager" method="post">
+				<input type="hidden" name="command" value="exit" />
+				<div align=right>
+					<button type="submit" form="exitFrm">Exit</button>
+				</div>
+			</form>
+		</td>
+	</tr>
 </table>
 </center>
 </body>

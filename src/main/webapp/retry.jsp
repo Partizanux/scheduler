@@ -1,73 +1,83 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <jsp:useBean id = "regRetry" class = "logic.RegistrationRetry" scope = "request"/>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
 <title>Retry</title>
+<link rel="stylesheet" href="${pageContext.request.contextPath}/static/style.css">
 </head>
 
 <body>
 <form name = "retryForm" action="Manager" method="post">
 <input type="hidden" name="command" value="registration"/>
 <center>
-<table cellpadding=10 cellspacing=2 border=0>
+<table  class="inde" >
 
-<th bgcolor="#c0c0c0">
-<font size=5>USER   REGISTRATION</font>
-<br>
-<font size=1>* Required Fields</font>
+<th colspan=2>
+USER   REGISTRATION
+<p>* Required Fields</p>
 </th>
 
-<tr bgcolor="#c0c0c0"><td valign=top>
-First Name*
-<br>
-<input type="text" name="firstName" value="<%=request.getParameter("firstName")%>" size=15 maxlength=20><br>
-<font size=2 color=red><%=regRetry.getErrFName()%></font>
-</td></tr>
+<tr><td align=left>
+First Name*:
+</td>
+<td>
+<input type="text" name="firstName" value="<%=request.getParameter("firstName")%>" maxlength=20><br>
+<span class="advise"><%=regRetry.getErrFName()%></span>
+</td>
+</tr>
 
-<tr bgcolor="#c0c0c0"><td valign=top>
-Last Name*
-<br>
-<input type="text" name="lastName" value="<%=request.getParameter("lastName")%>" size=15 maxlength=20><br>
-<font size=2 color=red><%=regRetry.getErrLName()%></font>
-</td></tr>
+<tr><td align=left>
+Last Name*:
+</td>
+<td>
+<input type="text" name="lastName" value="<%=request.getParameter("lastName")%>" maxlength=20><br>
+<span class="advise"><%=regRetry.getErrLName()%></span>
+</td>
+</tr>
 
-<tr bgcolor="#c0c0c0"><td valign=top>
-Login*
-<br>
-<input type="text" name="login" value="<%=request.getAttribute("loginAtt")%>" size=10 maxlength=15><br>
-<font size=2 color=red><%=regRetry.getErrLog()%></font>
-</td></tr>
+<tr><td align=left>
+Login*:
+</td>
+<td>
+<input type="text" name="login" value="<%=request.getAttribute("loginAtt")%>" maxlength=20><br>
+<span class="advise"><%=regRetry.getErrLog()%></span>
+</td>
+</tr>
 
-<tr bgcolor="#c0c0c0"><td valign=top>
-E-mail*
-<br>
-<input type="text" name="email" value="<%=request.getParameter("email")%>" size=25 maxlength=30><br>
-<font size=2 color=red><%=regRetry.getErrEmail()%></font>
-</td></tr>
+<tr><td align=left>
+E-mail*:
+</td>
+<td>
+<input type="text" name="email" value="<%=request.getParameter("email")%>" maxlength=20><br>
+<span class="advise"><%=regRetry.getErrEmail()%></span>
+</td>
+</tr>
 
-<tr bgcolor="#c0c0c0"><td valign=top>
-password*
-<br>
-<input type="password" name="pass" value="<%=request.getParameter("pass")%>" size=10 maxlength=15><br>
-<font size=2 color=red><%=regRetry.getErrPass()%></font>
-</td></tr>
+<tr><td align=left>
+password*:
+</td>
+<td>
+<input type="password" name="pass" value="<%=request.getParameter("pass")%>" maxlength=20><br>
+<span class="advise"><%=regRetry.getErrPass()%></span>
+</td>
+</tr>
 
-<tr bgcolor="#c0c0c0"><td valign=top>
-confirm password*
-<br>
-<input type="password" name="pass2" value="<%=request.getAttribute("pass2Att")%>" size=10 maxlength=15><br>
-<font size=2 color=red><%=regRetry.getErrPass2()%></font>
-</td></tr>
+<tr><td align=left>
+confirm password*:
+</td>
+<td>
+<input type="password" name="pass2" value="" maxlength=20><br>
+<span class="advise"><%=regRetry.getErrPass2()%></span>
+</td>
+</tr>
 
-<tr bgcolor="#c0c0c0">
-<td  align=center>
-<input type="submit" value="Submit"> <input type="reset" value="Reset">
+<tr>
+<td align=center colspan=2>
+<button type="submit">Submit</button> <button type="reset">Reset</button>
 </td>
 </tr>
 

@@ -9,14 +9,18 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.Logger;
+
 import main.Configs;
 import my_exceptions.FmtDataException;
+import my_exceptions.IncorrectEmailException;
 import my_exceptions.IncorrectLoginException;
 import my_exceptions.UserExistsException;
 
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 
 public class ActionLogic {
+	private static final Logger log = Logger.getLogger(ActionLogic.class);
 
 	private static final String ADD_QUERY = "INSERT INTO tasks (date, time, task, status, iduser, notify) VALUES (?, ?, ?, ?, ?, ?);";
 	private static final String GET_ID = "SELECT iduser FROM users WHERE login = ?";// login is unique
@@ -60,7 +64,8 @@ public class ActionLogic {
 		time = hour + ":" + min;
 
 		Connection conn = null;
-		ResultSet rs;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
 			conn = Configs.getConnection();
 
@@ -70,83 +75,117 @@ public class ActionLogic {
 			rs.next();
 			Integer ii = rs.getInt(1);
 
-			PreparedStatement ps = conn.prepareStatement(ADD_QUERY);
+			ps = conn.prepareStatement(ADD_QUERY);
 
 			ps.setString(1, date);
 			ps.setString(2, time);
-			
 			ps.setString(3, task);
 			ps.setInt(4, status);
 			ps.setInt(5, ii);
 			ps.setInt(6, 0);
 
 			ps.execute();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();// Release connection back to the pool
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close rs", e);
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 	}
 	
-	public static void delTask(String id, String log) {
+	public static void delTask(String id, String login) {
 
 		Connection conn = null;
+		PreparedStatement st = null;
 		try {
 			conn = Configs.getConnection();
 
-			PreparedStatement st = conn.prepareStatement(DEL_QUERY);
+			st = conn.prepareStatement(DEL_QUERY);
 			st.setString(1, id);
 			st.executeUpdate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+            if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException e) { 
+                	log.warn("Failed to close st", e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 	}
 	
-	public static void doneTask(String id, String log) {
+	public static void doneTask(String id, String login) {
 
 		Connection conn = null;
+		PreparedStatement st = null;
 		try {
 			conn = Configs.getConnection();
 
-			PreparedStatement st = conn.prepareStatement(DONE_QUERY);
+			st = conn.prepareStatement(DONE_QUERY);
 			st.setString(1, id);
 			st.executeUpdate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException e) { 
+                	log.warn("Failed to close st", e);
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 	}
 	
 	public static boolean checkLogin (String login, String pass){
 
         Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
         try{
         	conn = Configs.getConnection();
-            PreparedStatement ps = conn.prepareStatement(CHECK);
+            ps = conn.prepareStatement(CHECK);
             ps.setString(1, login);
             ps.setString(2, pass);
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
             rs.next();
           if (rs.getInt(1) == 1)
             	return true;
@@ -156,40 +195,59 @@ public class ActionLogic {
             e.printStackTrace();
        }
        finally{
-            try {
-                 if(conn != null)
-                 conn.close();
-            } catch (SQLException e) {
-                 e.printStackTrace();
-            }
+    	   if (rs != null) {
+               try {
+                   rs.close();
+               } catch (SQLException e) {
+                log.warn("Failed to close rs", e);
+               }
+           }
+           if (ps != null) {
+               try {
+                   ps.close();
+               } catch (SQLException e) { 
+                log.warn("Failed to close st", e);     
+               }
+           }
+           if (conn != null) {
+               try {
+                   conn.close();
+               } catch (SQLException e) {
+                log.warn("Failed to close conn", e);
+               }
+           }
        }
 		return false;
 	}
 	
-	public static void registration(String fname, String lname, String log,
+	public static void registration(String fname, String lname, String login,
 			String pass, String email) throws UserExistsException,
-			IncorrectLoginException {
+			IncorrectLoginException, IncorrectEmailException {
 
-		if (!checkLoginCorrect(log) || !checkEmailCorrect(email))
+		if (!checkLoginCorrect(login))
 			throw new IncorrectLoginException();
+		
+		if (!checkEmailCorrect(email))
+			throw new IncorrectEmailException();
 
 		Connection conn = null;
-		ResultSet rs;
+		PreparedStatement ps = null;
+		PreparedStatement pst =null;
+		ResultSet rs = null;
 		try {
 			conn = Configs.getConnection();
-			PreparedStatement ps = conn.prepareStatement(CHECK_EXISTS);
-			ps.setString(1, log);
+			ps = conn.prepareStatement(CHECK_EXISTS);
+			ps.setString(1, login);
 			rs = ps.executeQuery();
 			rs.next();
 			if (rs.getInt(1) != 0) {
 				throw new UserExistsException();
 			}
-			rs.close();
 
-			PreparedStatement pst = conn.prepareStatement(REG_QUERY);
+			pst = conn.prepareStatement(REG_QUERY);
 			pst.setString(1, fname);
 			pst.setString(2, lname);
-			pst.setString(3, log);
+			pst.setString(3, login);
 			pst.setString(4, pass);
 			pst.setString(5, email);
 			pst.execute();
@@ -197,12 +255,34 @@ public class ActionLogic {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close rs", e);
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (pst !=null) {
+                try {
+                    pst.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 	}
 
@@ -225,18 +305,20 @@ public class ActionLogic {
 		List<UTasks> tasks = new ArrayList<UTasks>();
 
 		ResultSet rslt = null;
-
+		PreparedStatement pst1 = null;
+		PreparedStatement pst2 = null;
 		Connection conn = null;
+		
 		try {
 			conn = Configs.getConnection();
 
-			PreparedStatement pst1 = conn.prepareStatement(GET_ID);
+			pst1 = conn.prepareStatement(GET_ID);
 			pst1.setString(1, login);
 			rslt = pst1.executeQuery();
 			rslt.next();
 			Integer id = rslt.getInt(1);
 
-			PreparedStatement pst2 = conn.prepareStatement(VIEW_QUERY);
+			pst2 = conn.prepareStatement(VIEW_QUERY);
 			pst2.setInt(1, id);
 			rslt = pst2.executeQuery();
 
@@ -244,7 +326,7 @@ public class ActionLogic {
 				UTasks t = new UTasks();
 				t.setIdt(rslt.getInt(1));
 				t.setDate(rslt.getString(2));
-				t.setTime(rslt.getString(3));				
+				t.setTime(rslt.getString(3));
 				t.setTaskmsg(rslt.getString(4));
 				if (rslt.getBoolean(5) == false)//false
 					t.setStatus("not_done");
@@ -275,18 +357,41 @@ public class ActionLogic {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (rslt != null) {
+                try {
+                    rslt.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close rs", e);
+                }
+            }
+            if (pst1 != null) {
+                try {
+                    pst1.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (pst2 !=null) {
+                try {
+                    pst2.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 		return tasks;
 	}
 	
 	public static void mailNotification(String id, String notify) {
 		Connection conn = null;
+		PreparedStatement st = null;
 		try {
 			conn = Configs.getConnection();
 
@@ -296,19 +401,27 @@ public class ActionLogic {
 			if(notify.equals("yes"))
 				query = NOTIFICATION_OFF;
 			
-			PreparedStatement st = conn.prepareStatement(query);
+			st = conn.prepareStatement(query);
 			st.setString(1, id);
 			st.executeUpdate();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (st != null) {
+                try {
+                    st.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 	}
 	

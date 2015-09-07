@@ -105,4 +105,9 @@ public class RegistrationRetry {
 	public static void userIncorrectLoginMsg() {
 		errLog = "Incorrect LOGIN";
 	}
+
+	public static void userIncorrectEmailMsg() {
+		errEmail = "Incorrect email";
+		
+	}
 }

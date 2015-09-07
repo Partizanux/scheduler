@@ -6,10 +6,11 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import logic.ActionLogic;
 import logic.RegistrationRetry;
+import my_exceptions.IncorrectEmailException;
 import my_exceptions.IncorrectLoginException;
+import my_exceptions.IncorrectEmailException;
 import my_exceptions.UserExistsException;
 
 
@@ -55,6 +56,12 @@ public class RegCommand implements Command {
 			} catch (IncorrectLoginException el) {
 
 				RegistrationRetry.userIncorrectLoginMsg();
+				request.setAttribute("loginAtt", "");// erase login if user
+														// exists
+				page = "/retry.jsp";
+			} catch (IncorrectEmailException el) {
+
+				RegistrationRetry.userIncorrectEmailMsg();
 				request.setAttribute("loginAtt", "");// erase login if user
 														// exists
 				page = "/retry.jsp";

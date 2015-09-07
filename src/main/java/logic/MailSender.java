@@ -39,18 +39,19 @@ public class MailSender {
 		StringBuilder sb = new StringBuilder();
 		
 		ResultSet rslt = null;
-
+		PreparedStatement pst1 = null;
+		PreparedStatement pst2 = null;
 		Connection conn = null;
 		try {
 			conn = Configs.getConnection();
 			
-			PreparedStatement pst1 = conn.prepareStatement(GET_EMAIL);
+			pst1 = conn.prepareStatement(GET_EMAIL);
 			pst1.setInt(1, iduser);
 			rslt = pst1.executeQuery();
 			rslt.next();
 			String email = rslt.getString(1);
 
-			PreparedStatement pst2 = conn.prepareStatement(CHOOSE_TASK_QUERY);
+			pst2 = conn.prepareStatement(CHOOSE_TASK_QUERY);
 			pst2.setInt(1, idtask);
 			rslt = pst2.executeQuery();
 			rslt.next();
@@ -77,12 +78,34 @@ public class MailSender {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				if (conn != null)
-					conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			if (rslt != null) {
+                try {
+                    rslt.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close rs", e);
+                }
+            }
+            if (pst1 != null) {
+                try {
+                    pst1.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (pst2 !=null) {
+                try {
+                    pst2.close();
+                } catch (SQLException e) { 
+                 log.warn("Failed to close st", e);     
+                }
+            }
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                 log.warn("Failed to close conn", e);
+                }
+            }
 		}
 	}
 

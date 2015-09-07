@@ -1,0 +1,102 @@
+TABLE {
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+    color: #00000;
+    text-align: center;
+    border-collapse: collapse;
+    table-layout: fixed;
+   }
+   TH {
+    background: #b9c9fe;
+    border-bottom: 2px solid #FFF;     
+    font-size: 30px;
+    padding: 10px;
+    color: #039;
+   }
+   TD {
+    background: #e8edff;
+    border-bottom: 2px;
+    border-bottom: 2px solid #FFFFFF;
+    padding: 5px;
+    font-size: 17px;
+    color: #669;
+   }
+.view tr:hover td {
+  background: #ccddff; 
+}
+
+.col12{width: 10%;}
+
+.col3{
+    width: 50%;
+}
+
+.col456{width: 10%;}
+
+.header{
+	font-weight: bold;
+    font-size: 19px;
+}
+button{
+  text-align: center;
+  color: white;
+  text-decoration: none;
+  padding: .1em 1em 1em;
+  border: 2px solid;
+  border-radius: 0px;
+  background: #b9c9fe;
+  transition: 0.0s;
+  font-weight: bold;
+  font-size: 12px;
+  margin: .15em;
+  margin-bottom: .2em;
+  margin-top: .2em;
+  width: 10em;  height: 2em;
+
+} 
+button:hover { background: #b9daff; }
+button:active {
+  color: #b9c9fe;
+  background: #FFF;
+}
+.bdisabled{
+  color: #b9c9fe;
+  background: #FFF;
+}
+.bdisabled:hover {
+  color: #b9c9fe;
+  background: #FFF;
+}
+.task{
+	text-align: left;
+}
+#eltask{
+   vertical-align: top;
+}
+#buttonView{
+  width: 20.6em;
+}
+#welcome {
+  font-size: 3.2em;
+}
+.inde td{
+  padding-left: 2em;
+  padding-right: 2em;
+}
+.inde span{
+  padding-right: 0.7em;
+  padding-left: 0.7em;
+}
+.inde a{
+  font-size: .3em;
+  font-style: italic;
+}
+.inde p{
+  margin-bottom: 0.2em;
+  margin-top: 0.2em;
+  font-size: .5em;
+  font-style: italic;
+}
+.advise{
+	font-size: .7em;
+	color: red;
+}
